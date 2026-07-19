@@ -209,7 +209,6 @@
     }
   }
 
-  hydrateFeed('google-reviews', 'data/google-reviews.json');
   hydrateFeed('instagram', 'data/instagram.json');
   hydrateFeed('tiktok', 'data/tiktok.json');
   hydrateFeed('youtube', 'data/youtube.json');

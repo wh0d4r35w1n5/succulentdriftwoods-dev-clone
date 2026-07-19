@@ -18,8 +18,6 @@ jobs:
           node-version: "20"
       - name: Fetch latest public feed data
         env:
-          GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
-          GOOGLE_PLACE_ID: ${{ secrets.GOOGLE_PLACE_ID }}
           INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
           INSTAGRAM_USER_ID: ${{ secrets.INSTAGRAM_USER_ID }}
           TIKTOK_ACCESS_TOKEN: ${{ secrets.TIKTOK_ACCESS_TOKEN }}

@@ -3,12 +3,10 @@ import { mkdir, writeFile } from 'node:fs/promises';
 const DATA_DIR = new URL('../data/', import.meta.url);
 
 const env = {
-  googlePlacesApiKey: process.env.GOOGLE_PLACES_API_KEY,
-  googlePlaceId: process.env.GOOGLE_PLACE_ID,
   instagramAccessToken: process.env.INSTAGRAM_ACCESS_TOKEN,
   instagramUserId: process.env.INSTAGRAM_USER_ID,
   tiktokAccessToken: process.env.TIKTOK_ACCESS_TOKEN,
-  youtubeApiKey: process.env.YOUTUBE_API_KEY || process.env.GOOGLE_PLACES_API_KEY,
+  youtubeApiKey: process.env.YOUTUBE_API_KEY,
   youtubeChannelHandle: process.env.YOUTUBE_CHANNEL_HANDLE || 'succulentdriftwoods'
 };
 
@@ -37,29 +35,6 @@ async function writeFeed(name, items) {
     items
   };
   await writeFile(new URL(`${name}.json`, DATA_DIR), `${JSON.stringify(payload, null, 2)}\n`);
-}
-
-async function updateGoogleReviews() {
-  if (!env.googlePlacesApiKey || !env.googlePlaceId) {
-    console.log('Skipping Google reviews: GOOGLE_PLACES_API_KEY or GOOGLE_PLACE_ID missing.');
-    return;
-  }
-
-  const params = new URLSearchParams({
-    place_id: env.googlePlaceId,
-    fields: 'name,rating,user_ratings_total,reviews,url',
-    key: env.googlePlacesApiKey
-  });
-  const data = await fetchJson(`https://maps.googleapis.com/maps/api/place/details/json?${params}`);
-  const reviews = data.result?.reviews || [];
-  await writeFeed('google-reviews', reviews.map((review) => ({
-    author: review.author_name,
-    rating: review.rating,
-    text: review.text,
-    date: review.time ? new Date(review.time * 1000).toISOString() : '',
-    dateLabel: review.relative_time_description,
-    url: review.author_url || data.result?.url || ''
-  })));
 }
 
 async function updateInstagram() {
@@ -148,7 +123,6 @@ async function updateYouTube() {
   })));
 }
 
-await updateGoogleReviews();
 await updateInstagram();
 await updateTikTok();
 await updateYouTube();

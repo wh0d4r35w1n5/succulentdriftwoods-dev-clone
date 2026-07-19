@@ -1075,6 +1075,10 @@ blockquote cite {
   border-color: rgba(42,40,38,0.2);
   color: var(--charcoal);
 }
+.review-note {
+  font-size: 0.86rem;
+  margin-top: 1rem;
+}
 .feed-placeholder {
   min-height: 170px;
   border: 1px dashed rgba(42,40,38,0.22);
