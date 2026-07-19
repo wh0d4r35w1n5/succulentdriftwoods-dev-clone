@@ -1079,6 +1079,34 @@ blockquote cite {
   font-size: 0.86rem;
   margin-top: 1rem;
 }
+.testimonial-list {
+  margin-top: 1.5rem;
+}
+.testimonial-card {
+  background: var(--charcoal);
+  color: var(--cream);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.5rem, 4vw, 2.2rem);
+  box-shadow: var(--shadow);
+}
+.testimonial-card blockquote {
+  margin-top: 0.5rem;
+  padding-left: 1.25rem;
+  border-left-color: var(--gold-light);
+}
+.testimonial-card blockquote p {
+  color: rgba(247,243,236,0.9);
+}
+.testimonial-card blockquote cite {
+  color: var(--gold-light);
+}
+.testimonial-source {
+  color: var(--gold-light);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
 .feed-placeholder {
   min-height: 170px;
   border: 1px dashed rgba(42,40,38,0.22);
