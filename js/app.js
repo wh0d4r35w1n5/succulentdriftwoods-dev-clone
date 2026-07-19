@@ -151,17 +151,68 @@
     year: 'numeric'
   });
 
-  for (let i = 0; i < SATURDAY_COUNT; i++) {
-    const sat = new Date(FIRST_SATURDAY);
-    sat.setDate(FIRST_SATURDAY.getDate() + i * 7);
-    const label = `${formatter.format(sat)} · 10:00 AM – 12:00 PM`;
-    const value = sat.toISOString().split('T')[0];
-    const opt = document.createElement('option');
-    opt.value = label;
-    opt.textContent = label;
-    opt.dataset.iso = value;
-    dateSelect.appendChild(opt);
+  if (dateSelect) {
+    for (let i = 0; i < SATURDAY_COUNT; i++) {
+      const sat = new Date(FIRST_SATURDAY);
+      sat.setDate(FIRST_SATURDAY.getDate() + i * 7);
+      const label = `${formatter.format(sat)} · 10:00 AM – 12:00 PM`;
+      const value = sat.toISOString().split('T')[0];
+      const opt = document.createElement('option');
+      opt.value = label;
+      opt.textContent = label;
+      opt.dataset.iso = value;
+      dateSelect.appendChild(opt);
+    }
   }
+
+  function escapeHtml(value) {
+    return String(value || '').replace(/[&<>"']/g, (char) => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    }[char]));
+  }
+
+  function renderFeedCard(item) {
+    const image = item.image ? `<img src="${escapeHtml(item.image)}" alt="" loading="lazy">` : '';
+    const rating = item.rating ? `<p class="feed-rating">${'★'.repeat(Math.round(item.rating))}</p>` : '';
+    const date = item.date ? `<time datetime="${escapeHtml(item.date)}">${escapeHtml(item.dateLabel || item.date)}</time>` : '';
+    return [
+      '<article class="live-feed-item">',
+      image,
+      '<div>',
+      `<h4>${escapeHtml(item.title || item.author || item.platform || 'Update')}</h4>`,
+      rating,
+      `<p>${escapeHtml(item.text || item.description || '')}</p>`,
+      date,
+      item.url ? `<a href="${escapeHtml(item.url)}" target="_blank" rel="noopener" class="link-arrow">Open</a>` : '',
+      '</div>',
+      '</article>'
+    ].join('');
+  }
+
+  async function hydrateFeed(feedName, path) {
+    const target = document.querySelector(`[data-feed="${feedName}"]`);
+    if (!target) return;
+    try {
+      const res = await fetch(path, { cache: 'no-store' });
+      if (!res.ok) throw new Error(`Feed ${feedName} returned ${res.status}`);
+      const payload = await res.json();
+      const items = Array.isArray(payload.items) ? payload.items : [];
+      if (!items.length) return;
+      target.classList.add('live-feed-list');
+      target.innerHTML = items.slice(0, 6).map(renderFeedCard).join('');
+    } catch (err) {
+      target.dataset.feedStatus = 'unavailable';
+    }
+  }
+
+  hydrateFeed('google-reviews', 'data/google-reviews.json');
+  hydrateFeed('instagram', 'data/instagram.json');
+  hydrateFeed('tiktok', 'data/tiktok.json');
+  hydrateFeed('youtube', 'data/youtube.json');
 
   // ── Stripe booking button — fire Google Ads conversions on click ──
   const stripeBtn = document.getElementById('stripe-book-btn');

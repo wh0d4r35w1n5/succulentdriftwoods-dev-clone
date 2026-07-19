@@ -1087,6 +1087,49 @@ blockquote cite {
   background: rgba(255,255,255,0.35);
   margin: 1rem 0;
 }
+.feed-placeholder.live-feed-list {
+  display: grid;
+  gap: 0.85rem;
+  align-items: stretch;
+  justify-content: stretch;
+  text-align: left;
+  border-style: solid;
+}
+.live-feed-item {
+  display: grid;
+  grid-template-columns: 82px 1fr;
+  gap: 0.85rem;
+  align-items: start;
+  padding: 0.85rem;
+  background: rgba(255,255,255,0.45);
+  border-radius: var(--radius);
+}
+.live-feed-item img {
+  width: 82px;
+  height: 82px;
+  object-fit: cover;
+  border-radius: calc(var(--radius) - 4px);
+}
+.live-feed-item h4 {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+}
+.live-feed-item p {
+  font-size: 0.82rem;
+  line-height: 1.45;
+  margin-bottom: 0.35rem;
+}
+.live-feed-item time {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--warm-gray);
+  margin-bottom: 0.35rem;
+}
+.feed-rating {
+  color: var(--gold);
+  letter-spacing: 0.08em;
+}
 .youtube-embed {
   aspect-ratio: 16 / 9;
   background: rgba(42,40,38,0.08);
